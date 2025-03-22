@@ -5,12 +5,14 @@ import os
 import tempfile
 import threading
 from datetime import datetime
+import asyncio
+
 try:
     from googletrans import Translator
     TRANSLATION_AVAILABLE = True
 except ImportError:
     TRANSLATION_AVAILABLE = False
-    
+
 try:
     import pygame
     PLAYER_ENGINE = "pygame"
@@ -145,7 +147,7 @@ class TextToSpeechApp:
     def get_text_content(self):
         return self.text_input.get("1.0", tk.END).strip()
     
-    def translate_text(self, text, target_language):
+    async def translate_text_async(self, text, target_language):
         if not TRANSLATION_AVAILABLE:
             messagebox.showerror("Error", "Translation feature is not available. Please install googletrans library.")
             return text
@@ -153,13 +155,16 @@ class TextToSpeechApp:
         try:
             self.status_var.set("Translating...")
             self.root.update()
-            translated = self.translator.translate(text, dest=target_language)
+            translated = await self.translator.translate(text, dest=target_language)
             self.status_var.set("Translation complete")
             return translated.text
         except Exception as e:
             messagebox.showerror("Translation Error", f"Failed to translate text: {str(e)}")
             self.status_var.set("Translation failed")
             return text
+
+    def translate_text(self, text, target_language):
+        return asyncio.run(self.translate_text_async(text, target_language))
     
     def text_to_speech(self, text, language, output_file=None):
         try:
