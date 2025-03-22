@@ -13,7 +13,7 @@ A Python application that converts text to speech with translation capabilities 
 
 ## Screenshots
 
-![Application Screenshot](screenshots/app_screenshot.png)
+![Screenshot 2025-03-22 153447](https://github.com/user-attachments/assets/25571a0f-85d8-4445-baa7-11ccb0e31013)
 
 ## Requirements
 
